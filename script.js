@@ -1,3 +1,10 @@
+document.addEventListener("deviceready", onDeviceReady, false);
+
+function onDeviceReady() {
+  console.log("Device Ready ✅");
+}
+
+// SAVE CONTACT
 function saveContact() {
   let num = document.getElementById("contact").value;
 
@@ -10,29 +17,36 @@ function saveContact() {
   alert("Saved ❤️");
 }
 
+// SOS FUNCTION
 function sendSOS() {
-  if (!navigator.geolocation) {
-    alert("Location not supported");
+  let num = localStorage.getItem("contact");
+
+  if (!num) {
+    alert("No contact saved");
     return;
   }
 
-  navigator.geolocation.getCurrentPosition((pos) => {
-    let lat = pos.coords.latitude;
-    let lon = pos.coords.longitude;
+  navigator.geolocation.getCurrentPosition(
+    function (pos) {
+      let lat = pos.coords.latitude;
+      let lon = pos.coords.longitude;
 
-    let link = `https://maps.google.com/?q=${lat},${lon}`;
-    let msg = `🚨 I need help! My location: ${link}`;
+      let link = `https://maps.google.com/?q=${lat},${lon}`;
+      let msg = `🚨 I need help! My location: ${link}`;
 
-    let num = localStorage.getItem("contact");
+      let url = `https://wa.me/${num}?text=${encodeURIComponent(msg)}`;
 
-    if (!num) {
-      alert("No contact saved");
-      return;
+      // OPEN WHATSAPP
+      window.location.href = url;
+
+      document.getElementById("status").innerText = "SOS Sent 🚨";
+    },
+    function (error) {
+      alert("Location error: " + error.message);
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 10000
     }
-
-    let url = `https://wa.me/${num}?text=${encodeURIComponent(msg)}`;
-    window.open(url, "_blank");
-
-    document.getElementById("status").innerText = "SOS Sent 🚨";
-  });
+  );
 }
