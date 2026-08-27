@@ -1,1216 +1,1622 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pratyusha's Love Vouchers 💝</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&family=Source+Code+Pro:wght@400&display=swap" rel="stylesheet">
-  <style>
-    *, 
-    *::before, 
-    *::after { 
-      box-sizing: border-box; 
-      margin: 0; 
-      padding: 0; 
-    }
-
-    body {
-      min-height: 100vh;
-      background: #110710;
-      font-family: 'Lato', sans-serif;
-      overflow-x: hidden;
-    }
-
-    /* ── Stars ── */
-    .stars { 
-      position: fixed; 
-      inset: 0; 
-      pointer-events: none; 
-      z-index: 0; 
-      overflow: hidden; 
-    }
-
-    .star {
-      position: absolute; 
-      border-radius: 50%; 
-      background: #fff; 
-      opacity: 0;
-      animation: twinkle var(--d, 3s) ease-in-out infinite var(--delay, 0s);
-    }
-
-    @keyframes twinkle {
-      0%, 100% {
-        opacity: 0;
-        transform: scale(0.8);
-      }
-      50% {
-        opacity: 0.85;
-        transform: scale(1.3);
-      }
-    }
-
-    /* ── Floating petals ── */
-    .petal {
-      position: fixed; 
-      font-size: 15px; 
-      opacity: 0; 
-      pointer-events: none; 
-      z-index: 0;
-      animation: floatDown var(--fd, 8s) linear infinite var(--fdelay, 0s);
-    }
-
-    @keyframes floatDown {
-      0% {
-        transform: translateY(-30px) rotate(0deg);
-        opacity: 0;
-      }
-      10% {
-        opacity: 0.6;
-      }
-      90% {
-        opacity: 0.4;
-      }
-      100% {
-        transform: translateY(110vh) rotate(400deg);
-        opacity: 0;
-      }
-    }
-
-    /* ── Page ── */
-    .page {
-      position: relative; 
-      z-index: 1;
-      max-width: 500px; 
-      margin: 0 auto;
-      padding: 44px 18px 70px;
-    }
-
-    /* ── Header ── */
-    .header { 
-      text-align: center; 
-      margin-bottom: 44px; 
-      animation: fadeDown 0.8s ease both; 
-    }
-
-    @keyframes fadeDown {
-      from {
-        opacity: 0;
-        transform: translateY(-18px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .header-tag {
-      display: inline-block; 
-      font-size: 10px; 
-      letter-spacing: 3.5px;
-      text-transform: uppercase; 
-      color: #f7a8c4;
-      background: rgba(247, 168, 196, 0.1); 
-      border: 1px solid rgba(247, 168, 196, 0.28);
-      padding: 5px 18px; 
-      border-radius: 20px; 
-      margin-bottom: 16px;
-    }
-
-    .header h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(30px, 7vw, 40px); 
-      font-weight: 600;
-      color: #fff; 
-      line-height: 1.2; 
-      margin-bottom: 6px;
-    }
-
-    .header h1 span { 
-      font-style: italic; 
-      color: #f7a8c4; 
-    }
-
-    .header p { 
-      font-size: 12.5px; 
-      color: rgba(255, 255, 255, 0.38); 
-      letter-spacing: 1.2px; 
-    }
-
-    .divider {
-      display: flex; 
-      align-items: center; 
-      justify-content: center;
-      gap: 10px; 
-      margin: 16px 0 0; 
-      color: rgba(247, 168, 196, 0.4); 
-      font-size: 13px;
-    }
-
-    .divider::before,
-    .divider::after {
-      content: ''; 
-      display: block; 
-      width: 52px; 
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(247, 168, 196, 0.35));
-    }
-
-    .divider::after { 
-      background: linear-gradient(90deg, rgba(247, 168, 196, 0.35), transparent); 
-    }
-
-    /* ── Voucher list ── */
-    .vlist { 
-      display: flex; 
-      flex-direction: column; 
-      gap: 18px; 
-    }
-
-    /* ── Real voucher ticket ── */
-    .ticket {
-      display: flex;
-      border-radius: 16px;
-      overflow: visible;
-      cursor: pointer;
-      animation: fadeUp 0.55s ease both;
-      filter: drop-shadow(0 6px 24px rgba(0, 0, 0, 0.55));
-      transition: filter 0.3s, transform 0.3s;
-      position: relative;
-    }
-
-    .ticket:nth-child(1) { animation-delay: 0.08s; }
-    .ticket:nth-child(2) { animation-delay: 0.16s; }
-    .ticket:nth-child(3) { animation-delay: 0.24s; }
-    .ticket:nth-child(4) { animation-delay: 0.32s; }
-
-    .ticket:hover {
-      transform: translateY(-4px) scale(1.015);
-      filter: drop-shadow(0 14px 38px rgba(194, 24, 91, 0.32));
-    }
-
-    @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(28px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* stub (left colored slab) */
-    .ticket-stub {
-      width: 64px; 
-      flex-shrink: 0;
-      border-radius: 16px 0 0 16px;
-      display: flex; 
-      flex-direction: column;
-      align-items: center; 
-      justify-content: center;
-      gap: 10px;
-      position: relative;
-      padding: 20px 0;
-    }
-
-    .ticket-stub .stub-emoji { 
-      font-size: 26px; 
-    }
-
-    .ticket-stub .stub-no {
-      writing-mode: vertical-rl; 
-      text-orientation: mixed; 
-      transform: rotate(180deg);
-      font-family: 'Source Code Pro', monospace; 
-      font-size: 9px;
-      letter-spacing: 2px; 
-      color: rgba(255, 255, 255, 0.45); 
-      text-transform: uppercase;
-    }
-
-    /* perforation between stub and body */
-    .ticket-perf {
-      width: 0; 
-      flex-shrink: 0;
-      border-left: 2.5px dashed rgba(17, 7, 16, 0.9);
-      position: relative;
-    }
-
-    .ticket-perf::before, 
-    .ticket-perf::after {
-      content: '';
-      position: absolute;
-      width: 18px; 
-      height: 18px; 
-      border-radius: 50%;
-      background: #110710;
-      left: 50%; 
-      transform: translateX(-50%);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-    }
-
-    .ticket-perf::before { top: -9px; }
-    .ticket-perf::after  { bottom: -9px; }
-
-    /* main body */
-    .ticket-body {
-      flex: 1;
-      background: #1e0d1a;
-      border-radius: 0 16px 16px 0;
-      padding: 18px 18px 14px 20px;
-      position: relative;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-left: none;
-    }
-
-    /* subtle watermark */
-    .ticket-body::before {
-      content: attr(data-wm);
-      position: absolute; 
-      right: -8px; 
-      top: 50%;
-      transform: translateY(-50%) rotate(-12deg);
-      font-family: 'Playfair Display', serif;
-      font-size: 52px; 
-      font-style: italic;
-      color: rgba(255, 255, 255, 0.03);
-      pointer-events: none; 
-      white-space: nowrap;
-      letter-spacing: -2px;
-    }
-
-    .ticket-body-top {
-      display: flex; 
-      align-items: flex-start; 
-      justify-content: space-between;
-      margin-bottom: 10px;
-    }
-
-    .ticket-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 17px; 
-      font-weight: 600; 
-      color: #fff; 
-      line-height: 1.25;
-    }
-
-    .ticket-validity {
-      font-size: 9px; 
-      letter-spacing: 1.8px; 
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.35); 
-      text-align: right; 
-      line-height: 1.6;
-      flex-shrink: 0; 
-      margin-left: 10px;
-    }
-
-    .ticket-validity span { 
-      display: block; 
-      color: #f7a8c4; 
-      font-size: 10px; 
-    }
-
-    .ticket-tagline {
-      font-size: 12px; 
-      color: rgba(255, 255, 255, 0.45); 
-      margin-bottom: 12px;
-      font-style: italic;
-    }
-
-    /* barcode strip */
-    .barcode {
-      display: flex; 
-      align-items: flex-end; 
-      gap: 1.5px;
-      height: 22px; 
-      margin-bottom: 4px;
-    }
-
-    .barcode-bar {
-      background: rgba(247, 168, 196, 0.25);
-      border-radius: 1px;
-    }
-
-    .ticket-footer {
-      display: flex; 
-      align-items: center; 
-      justify-content: space-between;
-      margin-top: 2px;
-    }
-
-    .ticket-serial {
-      font-family: 'Source Code Pro', monospace;
-      font-size: 8.5px; 
-      letter-spacing: 1.5px;
-      color: rgba(255, 255, 255, 0.22); 
-      text-transform: uppercase;
-    }
-
-    .ticket-cta {
-      font-size: 10px; 
-      letter-spacing: 1.5px; 
-      text-transform: uppercase;
-      color: rgba(247, 168, 196, 0.7); 
-      display: flex; 
-      align-items: center; 
-      gap: 4px;
-      transition: color 0.2s, gap 0.2s;
-    }
-
-    .ticket:hover .ticket-cta { 
-      color: #f7a8c4; 
-      gap: 7px; 
-    }
-
-    /* redeemed state */
-    .ticket.is-redeemed .ticket-body { opacity: 0.55; }
-    .ticket.is-redeemed .ticket-stub { opacity: 0.6; }
-    
-    .redeemed-stamp {
-      display: none;
-      position: absolute; 
-      top: 10px; 
-      right: 12px;
-      border: 2px solid rgba(80, 200, 120, 0.6); 
-      border-radius: 6px;
-      padding: 2px 8px;
-      font-size: 9px; 
-      letter-spacing: 2px; 
-      text-transform: uppercase;
-      color: #7ef5a0; 
-      transform: rotate(-6deg);
-      background: rgba(80, 200, 120, 0.08);
-      z-index: 5;
-    }
-
-    .ticket.is-redeemed .redeemed-stamp { 
-      display: block; 
-    }
-
-    /* ─── STUB COLORS per ticket ─── */
-    .stub-pink   { background: linear-gradient(175deg, #b5295e, #7c1040); }
-    .stub-mauve  { background: linear-gradient(175deg, #8e3569, #5c1e45); }
-    .stub-rose   { background: linear-gradient(175deg, #c0405a, #842535); }
-    .stub-purple { background: linear-gradient(175deg, #7249a8, #4a2870); }
-
-    /* ══════════════════════════
-       LIFETIME LOVE — SPECIAL
-    ══════════════════════════ */
-    .ticket-lifetime {
-      cursor: pointer;
-      animation: fadeUp 0.55s ease 0.42s both;
-      position: relative;
-      border-radius: 20px;
-      overflow: visible;
-      filter: drop-shadow(0 10px 40px rgba(194, 24, 91, 0.45));
-      transition: filter 0.35s, transform 0.35s;
-    }
-
-    .ticket-lifetime:hover {
-      transform: translateY(-6px) scale(1.018);
-      filter: drop-shadow(0 18px 55px rgba(194, 24, 91, 0.65));
-    }
-
-    /* golden animated border */
-    .lifetime-outer {
-      background: linear-gradient(135deg, #c2185b, #e91e8c, #ff6090, #c2185b);
-      background-size: 300% 300%;
-      animation: gradShift 4s ease infinite;
-      padding: 2px; 
-      border-radius: 20px;
-    }
-
-    @keyframes gradShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    .lifetime-inner {
-      background: #110710;
-      border-radius: 18px;
-      padding: 0;
-      overflow: hidden;
-      position: relative;
-    }
-
-    /* shimmer sweep */
-    .lifetime-inner::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.04) 50%, transparent 60%);
-      background-size: 200% 100%;
-      animation: shimmer 3s ease infinite;
-    }
-
-    @keyframes shimmer {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
-
-    .lifetime-header {
-      background: linear-gradient(135deg, #6a0832 0%, #c2185b 45%, #e91e8c 100%);
-      padding: 28px 26px 22px;
-      text-align: center;
-      position: relative;
-    }
-
-    .lifetime-emoji { 
-      font-size: 48px; 
-      display: block; 
-      margin-bottom: 6px;
-      animation: heartbeat 1.4s ease-in-out infinite; 
-      filter: drop-shadow(0 4px 10px rgba(255, 215, 0, 0.4)); 
-    }
-
-    @keyframes heartbeat {
-      0%, 100% { transform: scale(1); }
-      14% { transform: scale(1.15); }
-      28% { transform: scale(1); }
-      42% { transform: scale(1.1); }
-    }
-
-    .lifetime-header h2 {
-      font-family: 'Playfair Display', serif; 
-      font-size: 23px; 
-      font-weight: 600;
-      color: #fff; 
-      margin-bottom: 4px;
-    }
-
-    .lifetime-header p {
-      font-size: 10px; 
-      letter-spacing: 3px; 
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.6);
-    }
-
-    /* notch cutouts */
-    .notch {
-      position: absolute; 
-      bottom: -14px; 
-      width: 28px; 
-      height: 28px;
-      background: #110710; 
-      border-radius: 50%;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-    .notch-l { left: -14px; }
-    .notch-r { right: -14px; }
-
-    /* dashed perf */
-    .lifetime-perf {
-      display: flex; 
-      align-items: center; 
-      gap: 0; 
-      padding: 0 10px; 
-      margin: 14px 0 12px;
-    }
-
-    .lifetime-perf span { 
-      flex: 1; 
-      border-top: 2px dashed rgba(247, 168, 196, 0.18); 
-    }
-
-    .perf-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      margin: 0 2px;
-      background: rgba(247, 168, 196, 0.12); 
-      border: 1px solid rgba(247, 168, 196, 0.25);
-    }
-
-    .lifetime-body { 
-      padding: 4px 26px 12px; 
-      text-align: center; 
-    }
-
-    .lifetime-body p {
-      font-family: 'Lato', sans-serif; 
-      font-size: 14px; 
-      line-height: 1.85;
-      color: rgba(255, 255, 255, 0.72);
-    }
-
-    .lifetime-body p em { 
-      font-style: italic; 
-      color: #f7a8c4; 
-    }
-
-    .lifetime-body p strong { 
-      color: #fff; 
-      font-weight: 700; 
-    }
-
-    .lifetime-action-prompt {
-      font-size: 12px;
-      letter-spacing: 2px;
-      font-weight: bold;
-      text-transform: uppercase;
-      color: #f7a8c4;
-      margin-top: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      animation: pulseGlow 2s infinite ease-in-out;
-    }
-
-    @keyframes pulseGlow {
-      0%, 100% { 
-        transform: scale(1); 
-        opacity: 0.8; 
-        text-shadow: 0 0 4px rgba(247, 168, 196, 0); 
-      }
-      50% { 
-        transform: scale(1.04); 
-        opacity: 1; 
-        text-shadow: 0 0 12px rgba(247, 168, 196, 0.6); 
-      }
-    }
-
-    .lifetime-serial {
-      font-family: 'Source Code Pro', monospace; 
-      font-size: 9px;
-      letter-spacing: 2.5px; 
-      color: rgba(255, 255, 255, 0.18);
-      text-align: center; 
-      margin: 16px 0 18px; 
-      text-transform: uppercase;
-    }
-
-    /* ── Modal ── */
-    .modal-overlay {
-      display: none; 
-      position: fixed; 
-      inset: 0;
-      background: rgba(8, 2, 8, 0.88); 
-      backdrop-filter: blur(10px);
-      z-index: 200; 
-      align-items: center; 
-      justify-content: center; 
-      padding: 20px;
-    }
-
-    .modal-overlay.open { 
-      display: flex; 
-      animation: overlayIn 0.28s ease; 
-    }
-
-    @keyframes overlayIn { 
-      from { opacity: 0; } 
-      to { opacity: 1; } 
-    }
-
-    .modal {
-      position: relative; 
-      width: 100%; 
-      max-width: 360px;
-      background: #1a0a16; 
-      border: 1px solid rgba(247, 168, 196, 0.3);
-      border-radius: 22px; 
-      overflow: hidden;
-      animation: modalIn 0.33s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-    }
-
-    @keyframes modalIn {
-      from {
-        opacity: 0;
-        transform: scale(0.82) translateY(22px);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-      }
-    }
-
-    .modal-band {
-      padding: 30px 22px 26px; 
-      text-align: center; 
-      position: relative;
-    }
-
-    .modal-band::after {
-      content: ''; 
-      position: absolute; 
-      bottom: -1px;
-      left: 0;
-      right: 0;
-      height: 18px; 
-      background: #1a0a16;
-      border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-    }
-
-    .mnotch {
-      position: absolute; 
-      bottom: -12px; 
-      width: 24px; 
-      height: 24px;
-      background: rgba(8, 2, 8, 0.88); 
-      border-radius: 50%;
-      border: 1px solid rgba(247, 168, 196, 0.15);
-    }
-    .mnotch-l { left: -12px; }
-    .mnotch-r { right: -12px; }
-
-    .m-emoji { 
-      font-size: 38px; 
-      display: block; 
-      margin-bottom: 10px; 
-    }
-
-    .modal-band h2 {
-      font-family: 'Playfair Display', serif; 
-      font-size: 21px;
-      color: #fff; 
-      font-weight: 600; 
-      margin-bottom: 4px;
-    }
-
-    .modal-band-tag { 
-      font-size: 10px; 
-      letter-spacing: 2.5px; 
-      text-transform: uppercase; 
-      color: rgba(255, 255, 255, 0.45); 
-    }
-
-    .modal-perf {
-      display: flex; 
-      align-items: center; 
-      padding: 0 10px; 
-      margin: 20px 0 16px;
-    }
-
-    .modal-perf span { 
-      flex: 1; 
-      border-top: 2px dashed rgba(247, 168, 196, 0.18); 
-    }
-
-    .mperf-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      margin: 0 2px;
-      background: rgba(247, 168, 196, 0.1);
-      border: 1px solid rgba(247, 168, 196, 0.22);
-    }
-
-    .modal-content { 
-      padding: 0 24px; 
-      text-align: center; 
-    }
-
-    .modal-content p { 
-      font-size: 14px; 
-      line-height: 1.8; 
-      color: rgba(255, 255, 255, 0.68); 
-    }
-
-    .modal-content p em { 
-      color: #f7a8c4; 
-      font-style: italic; 
-    }
-
-    .modal-content p strong { 
-      color: #fff; 
-      font-weight: 700; 
-    }
-
-    .m-serial {
-      font-family: 'Source Code Pro', monospace; 
-      font-size: 9px;
-      letter-spacing: 2px; 
-      color: rgba(255, 255, 255, 0.18);
-      text-align: center; 
-      margin: 16px 0 20px; 
-      text-transform: uppercase;
-    }
-
-    .modal-actions { 
-      padding: 0 22px 26px; 
-      display: flex; 
-      flex-direction: column; 
-      gap: 10px; 
-    }
-
-    .btn-redeem {
-      width: 100%; 
-      padding: 13px; 
-      border: none; 
-      border-radius: 50px;
-      background: linear-gradient(135deg, #c2185b, #e91e8c);
-      color: #fff; 
-      font-family: 'Lato', sans-serif; 
-      font-size: 13.5px;
-      font-weight: 700; 
-      letter-spacing: 0.8px; 
-      cursor: pointer;
-      position: relative; 
-      overflow: hidden;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .btn-redeem::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), transparent);
-      border-radius: 50px;
-    }
-
-    .btn-redeem:hover { 
-      transform: translateY(-2px); 
-      box-shadow: 0 9px 30px rgba(194, 24, 91, 0.5); 
-    }
-
-    .btn-redeem.used { 
-      background: linear-gradient(135deg, #1b5e20, #388e3c); 
-      cursor: default; 
-    }
-
-    .btn-redeem.used:hover { 
-      transform: none; 
-    }
-
-    .btn-back {
-      width: 100%; 
-      padding: 11px; 
-      border: 1px solid rgba(255, 255, 255, 0.11);
-      border-radius: 50px; 
-      background: transparent; 
-      color: rgba(255, 255, 255, 0.38);
-      font-family: 'Lato', sans-serif; 
-      font-size: 12.5px; 
-      cursor: pointer;
-      transition: border-color 0.2s, color 0.2s;
-    }
-
-    .btn-back:hover { 
-      border-color: rgba(247, 168, 196, 0.38); 
-      color: rgba(255, 255, 255, 0.6); 
-    }
-
-    .modal-close {
-      position: absolute; 
-      top: 13px; 
-      right: 15px; 
-      width: 28px; 
-      height: 28px;
-      background: rgba(255, 255, 255, 0.09); 
-      border: none; 
-      border-radius: 50%;
-      color: #fff; 
-      font-size: 15px; 
-      cursor: pointer; 
-      display: flex;
-      align-items: center; 
-      justify-content: center; 
-      z-index: 2; 
-      transition: background 0.2s;
-    }
-
-    .modal-close:hover { 
-      background: rgba(255, 255, 255, 0.18); 
-    }
-
-    /* ── Footer ── */
-    .footer {
-      text-align: center; 
-      margin-top: 48px;
-      font-size: 10.5px; 
-      color: rgba(255, 255, 255, 0.18); 
-      letter-spacing: 1.2px;
-      animation: fadeUp 0.6s ease 0.9s both;
-    }
-
-    .footer span { 
-      color: rgba(247, 168, 196, 0.45); 
-    }
-
-    @keyframes burst {
-      0% {
-        transform: translateY(0) scale(1);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(-90px) scale(0.15);
-        opacity: 0;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>ResqGrid — Emergency Response Network</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+:root{
+    --bg:#050914;
+    --panel:rgba(12,20,36,.78);
+    --line:rgba(120,170,255,.16);
+    --text:#edf4ff;
+    --muted:#8e9bb3;
+    --blue:#4da3ff;
+    --cyan:#54e6ff;
+    --green:#55e6a5;
+    --red:#ff5f6d;
+    --pink:#ff72b6;
+}
+
+html,body{
+    width:100%;
+    min-height:100%;
+    background:var(--bg);
+    color:var(--text);
+    font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    overflow-x:hidden;
+}
+
+body{
+    min-height:100vh;
+}
+
+button,input{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.hidden{
+    display:none !important;
+}
+
+/* ================= BACKGROUND ================= */
+
+.bg{
+    position:fixed;
+    inset:0;
+    z-index:-3;
+    overflow:hidden;
+    background:
+        radial-gradient(circle at 20% 20%,rgba(50,130,255,.13),transparent 30%),
+        radial-gradient(circle at 80% 75%,rgba(0,220,255,.08),transparent 28%),
+        #050914;
+}
+
+.bg::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background-image:
+        linear-gradient(rgba(90,150,255,.045) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(90,150,255,.045) 1px,transparent 1px);
+    background-size:42px 42px;
+    mask-image:linear-gradient(to bottom,black,transparent);
+}
+
+.orb{
+    position:absolute;
+    width:300px;
+    height:300px;
+    border-radius:50%;
+    filter:blur(70px);
+    opacity:.12;
+    animation:float 9s ease-in-out infinite alternate;
+}
+
+.orb.one{
+    background:#267dff;
+    top:-100px;
+    left:-100px;
+}
+
+.orb.two{
+    background:#00e0ff;
+    right:-120px;
+    bottom:-100px;
+    animation-delay:2s;
+}
+
+@keyframes float{
+    from{transform:translate(0,0);}
+    to{transform:translate(40px,-30px);}
+}
+
+/* ================= COMMON ================= */
+
+.screen{
+    min-height:100vh;
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+}
+
+.container{
+    width:min(920px,100%);
+    margin:auto;
+}
+
+.glass{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:24px;
+    box-shadow:0 25px 80px rgba(0,0,0,.35);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.logo-icon{
+    width:42px;
+    height:42px;
+    border-radius:12px;
+    display:grid;
+    place-items:center;
+    color:white;
+    font-weight:800;
+    background:linear-gradient(135deg,#247dff,#47dcff);
+    box-shadow:0 0 30px rgba(60,160,255,.25);
+}
+
+.logo-text{
+    font-size:20px;
+    font-weight:800;
+    letter-spacing:1.5px;
+}
+
+.logo-sub{
+    color:var(--muted);
+    font-size:10px;
+    letter-spacing:1.5px;
+    margin-top:2px;
+}
+
+.btn{
+    border:0;
+    border-radius:13px;
+    padding:14px 20px;
+    font-weight:750;
+    color:white;
+    background:linear-gradient(135deg,#237dff,#35bfff);
+    box-shadow:0 10px 30px rgba(35,125,255,.18);
+    transition:.2s ease;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 15px 35px rgba(35,125,255,.28);
+}
+
+.btn:active{
+    transform:scale(.97);
+}
+
+.btn.secondary{
+    background:rgba(255,255,255,.06);
+    border:1px solid var(--line);
+    box-shadow:none;
+}
+
+.btn.danger{
+    background:rgba(255,95,109,.1);
+    color:#ff9ba3;
+    border:1px solid rgba(255,95,109,.2);
+    box-shadow:none;
+}
+
+.center{
+    text-align:center;
+}
+
+/* ================= LOGIN ================= */
+
+.login-card{
+    width:min(440px,100%);
+    padding:34px;
+}
+
+.login-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:42px;
+}
+
+.status{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    color:#77e5b2;
+    font-size:11px;
+    font-weight:700;
+}
+
+.status-dot{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:#55e6a5;
+    box-shadow:0 0 12px #55e6a5;
+}
+
+.login-title{
+    font-size:34px;
+    margin-bottom:10px;
+    letter-spacing:-1px;
+}
+
+.login-description{
+    color:var(--muted);
+    line-height:1.6;
+    font-size:14px;
+    margin-bottom:30px;
+}
+
+.field{
+    margin-bottom:17px;
+}
+
+.field label{
+    display:block;
+    color:#aebbd0;
+    font-size:12px;
+    font-weight:700;
+    margin-bottom:8px;
+    letter-spacing:.4px;
+}
+
+.field input{
+    width:100%;
+    padding:14px 15px;
+    color:white;
+    background:rgba(255,255,255,.035);
+    border:1px solid rgba(140,180,255,.15);
+    border-radius:12px;
+    outline:none;
+    transition:.2s;
+}
+
+.field input:focus{
+    border-color:rgba(70,165,255,.7);
+    box-shadow:0 0 0 4px rgba(70,165,255,.07);
+}
+
+.login-btn{
+    width:100%;
+    margin-top:8px;
+}
+
+.security{
+    text-align:center;
+    color:#65728a;
+    font-size:10px;
+    margin-top:18px;
+}
+
+/* ================= SYSTEM ================= */
+
+.system-card{
+    padding:30px;
+}
+
+.system-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid var(--line);
+    padding-bottom:20px;
+    margin-bottom:28px;
+}
+
+.system-time{
+    color:#70809a;
+    font-size:11px;
+    font-family:monospace;
+}
+
+.terminal{
+    background:#02050b;
+    border:1px solid rgba(100,150,220,.1);
+    border-radius:15px;
+    padding:20px;
+    min-height:230px;
+    font-family:monospace;
+    font-size:13px;
+    line-height:2;
+    color:#7e91ad;
+    overflow:hidden;
+}
+
+.terminal .success{
+    color:#62e5a9;
+}
+
+.terminal .info{
+    color:#61caff;
+}
+
+.progress{
+    height:5px;
+    background:rgba(255,255,255,.05);
+    border-radius:10px;
+    margin-top:20px;
+    overflow:hidden;
+}
+
+.progress-bar{
+    height:100%;
+    width:0;
+    background:linear-gradient(90deg,#318aff,#54e6ff);
+    transition:width .3s;
+}
+
+/* ================= CASE ================= */
+
+.case-card{
+    padding:36px;
+}
+
+.case-header{
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+    align-items:flex-start;
+    margin-bottom:35px;
+}
+
+.case-number{
+    color:#7190b8;
+    font-family:monospace;
+    font-size:12px;
+    margin-bottom:9px;
+}
+
+.case-title{
+    font-size:clamp(30px,5vw,52px);
+    line-height:1;
+    letter-spacing:-2px;
+}
+
+.case-badge{
+    color:#ff858f;
+    background:rgba(255,95,109,.08);
+    border:1px solid rgba(255,95,109,.18);
+    padding:8px 11px;
+    border-radius:8px;
+    font-size:10px;
+    font-weight:800;
+    white-space:nowrap;
+}
+
+.data-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+}
+
+.data{
+    padding:18px;
+    border:1px solid var(--line);
+    border-radius:15px;
+    background:rgba(255,255,255,.025);
+}
+
+.data small{
+    color:#66758e;
+    display:block;
+    font-size:10px;
+    letter-spacing:1px;
+    margin-bottom:7px;
+}
+
+.data strong{
+    font-size:15px;
+}
+
+.case-message{
+    margin-top:25px;
+    padding:22px;
+    border-left:3px solid var(--red);
+    background:rgba(255,95,109,.04);
+    color:#aebbd0;
+    line-height:1.8;
+    border-radius:0 13px 13px 0;
+}
+
+.case-message b{
+    color:white;
+}
+
+.action-row{
+    margin-top:25px;
+    display:flex;
+    justify-content:flex-end;
+}
+
+/* ================= REVEAL ================= */
+
+.reveal-card{
+    padding:clamp(28px,6vw,65px);
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+}
+
+.reveal-card::before{
+    content:"";
+    position:absolute;
+    width:350px;
+    height:350px;
+    background:radial-gradient(circle,rgba(255,91,166,.13),transparent 65%);
+    left:50%;
+    top:-180px;
+    transform:translateX(-50%);
+}
+
+.reveal-eyebrow{
+    color:#ff79b9;
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:3px;
+    margin-bottom:20px;
+}
+
+.reveal-title{
+    font-size:clamp(38px,8vw,75px);
+    letter-spacing:-3px;
+    line-height:1;
+    margin-bottom:25px;
+}
+
+.reveal-text{
+    max-width:650px;
+    margin:auto;
+    color:#aebbd0;
+    line-height:1.9;
+    font-size:15px;
+}
+
+.heart{
+    font-size:54px;
+    margin-bottom:15px;
+    display:inline-block;
+    animation:heartbeat 1.5s infinite;
+}
+
+@keyframes heartbeat{
+    0%,100%{transform:scale(1);}
+    15%{transform:scale(1.13);}
+    30%{transform:scale(1);}
+}
+
+/* ================= STORY ================= */
+
+.story-card{
+    padding:32px;
+}
+
+.story-intro{
+    text-align:center;
+    margin-bottom:35px;
+}
+
+.story-intro h2{
+    font-size:clamp(30px,6vw,48px);
+    letter-spacing:-2px;
+}
+
+.story-intro p{
+    color:var(--muted);
+    margin-top:10px;
+}
+
+.timeline{
+    position:relative;
+    max-width:700px;
+    margin:auto;
+}
+
+.timeline::before{
+    content:"";
+    position:absolute;
+    left:14px;
+    top:5px;
+    bottom:5px;
+    width:1px;
+    background:linear-gradient(#4da3ff,#ff72b6,transparent);
+}
+
+.event{
+    position:relative;
+    padding-left:48px;
+    margin-bottom:28px;
+}
+
+.event-dot{
+    position:absolute;
+    left:8px;
+    top:3px;
+    width:13px;
+    height:13px;
+    border-radius:50%;
+    background:#55c8ff;
+    box-shadow:0 0 18px rgba(85,200,255,.6);
+}
+
+.event-date{
+    font-size:10px;
+    color:#65bfff;
+    letter-spacing:1.5px;
+    font-weight:800;
+    margin-bottom:5px;
+}
+
+.event h3{
+    margin-bottom:6px;
+}
+
+.event p{
+    color:#8e9bb3;
+    line-height:1.7;
+    font-size:13px;
+}
+
+/* ================= APOLOGY ================= */
+
+.letter-card{
+    padding:clamp(30px,7vw,70px);
+    text-align:center;
+}
+
+.letter-label{
+    color:#ff77b7;
+    font-size:11px;
+    letter-spacing:3px;
+    font-weight:800;
+    margin-bottom:22px;
+}
+
+.letter-card h2{
+    font-size:clamp(32px,6vw,58px);
+    letter-spacing:-2px;
+    margin-bottom:25px;
+}
+
+.letter{
+    max-width:680px;
+    margin:auto;
+    color:#b5c0d1;
+    line-height:2;
+    font-size:15px;
+}
+
+.letter strong{
+    color:white;
+}
+
+.signature{
+    margin-top:30px;
+    color:#ff91c5;
+    font-size:20px;
+    font-weight:700;
+}
+
+/* ================= QUESTION ================= */
+
+.question-card{
+    padding:clamp(30px,7vw,70px);
+    text-align:center;
+    overflow:hidden;
+}
+
+.question-small{
+    color:#7e8ba3;
+    letter-spacing:2px;
+    font-size:10px;
+    font-weight:800;
+    margin-bottom:20px;
+}
+
+.question-card h2{
+    font-size:clamp(32px,7vw,64px);
+    line-height:1.08;
+    letter-spacing:-2.5px;
+    max-width:800px;
+    margin:0 auto 22px;
+}
+
+.question-card p{
+    color:#8996aa;
+    line-height:1.7;
+    max-width:600px;
+    margin:auto;
+}
+
+.choice-area{
+    position:relative;
+    min-height:150px;
+    margin-top:35px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:15px;
+}
+
+.choice{
+    min-width:145px;
+}
+
+.no-btn{
+    position:relative;
+}
+
+/* ================= FINAL ================= */
+
+.final-card{
+    text-align:center;
+    padding:clamp(30px,8vw,75px);
+    overflow:hidden;
+}
+
+.big-heart{
+    font-size:75px;
+    animation:heartbeat 1.3s infinite;
+    margin-bottom:20px;
+}
+
+.final-card h1{
+    font-size:clamp(40px,9vw,76px);
+    letter-spacing:-4px;
+    line-height:1;
+    margin-bottom:20px;
+}
+
+.final-card p{
+    color:#a5b1c3;
+    line-height:1.9;
+    max-width:650px;
+    margin:auto;
+}
+
+.final-love{
+    margin-top:30px;
+    color:#ff82bd;
+    font-size:22px;
+    font-weight:800;
+}
+
+.case-closed{
+    margin-top:38px;
+    padding-top:22px;
+    border-top:1px solid var(--line);
+    color:#6f7e95;
+    font-family:monospace;
+    font-size:11px;
+    letter-spacing:1.5px;
+}
+
+/* ================= TOAST ================= */
+
+.toast{
+    position:fixed;
+    left:50%;
+    bottom:25px;
+    transform:translate(-50%,20px);
+    background:rgba(12,20,36,.94);
+    border:1px solid var(--line);
+    padding:12px 17px;
+    border-radius:12px;
+    color:#dce7f7;
+    font-size:12px;
+    opacity:0;
+    pointer-events:none;
+    transition:.3s;
+    z-index:100;
+    text-align:center;
+    width:max-content;
+    max-width:90%;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translate(-50%,0);
+}
+
+/* ================= CONFETTI ================= */
+
+.confetti{
+    position:fixed;
+    width:8px;
+    height:14px;
+    top:-30px;
+    z-index:200;
+    pointer-events:none;
+    animation:fall linear forwards;
+}
+
+@keyframes fall{
+    to{
+        transform:translate3d(var(--x),110vh,0) rotate(720deg);
+        opacity:0;
+    }
+}
+
+.floating-heart{
+    position:fixed;
+    bottom:-30px;
+    z-index:150;
+    pointer-events:none;
+    animation:floatHeart 4s ease-out forwards;
+    opacity:.8;
+}
+
+@keyframes floatHeart{
+    0%{
+        transform:translateY(0) scale(.7);
+        opacity:0;
+    }
+    15%{opacity:1;}
+    100%{
+        transform:translateY(-110vh) translateX(var(--drift)) scale(1.2);
+        opacity:0;
+    }
+}
+
+/* ================= FADE ================= */
+
+.fade-in{
+    animation:fadeIn .7s ease both;
+}
+
+@keyframes fadeIn{
+    from{opacity:0;transform:translateY(15px);}
+    to{opacity:1;transform:translateY(0);}
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:600px){
+
+    .screen{
+        padding:15px;
+        align-items:center;
+    }
+
+    .login-card,
+    .system-card,
+    .case-card,
+    .story-card{
+        padding:22px;
+        border-radius:19px;
+    }
+
+    .login-top{
+        margin-bottom:30px;
+    }
+
+    .login-title{
+        font-size:29px;
+    }
+
+    .case-header{
+        flex-direction:column;
+        margin-bottom:25px;
+    }
+
+    .case-badge{
+        align-self:flex-start;
+    }
+
+    .data-grid{
+        grid-template-columns:1fr;
+    }
+
+    .terminal{
+        font-size:11px;
+        min-height:220px;
+        padding:15px;
+    }
+
+    .choice-area{
+        min-height:190px;
+        gap:10px;
+    }
+
+    .choice{
+        min-width:125px;
+        padding:13px 12px;
+    }
+
+    .letter-card,
+    .question-card,
+    .final-card{
+        border-radius:19px;
+    }
+
+    .question-card h2{
+        letter-spacing:-1.5px;
+    }
+
+    .big-heart{
+        font-size:62px;
+    }
+
+    .final-card h1{
+        letter-spacing:-2px;
+    }
+}
+</style>
 </head>
+
 <body>
 
-  <div class="stars" id="stars"></div>
-  <div id="petals"></div>
+<div class="bg">
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+</div>
 
-  <div class="page">
-    <div class="header">
-      <div class="header-tag">✦ A gift from the heart ✦</div>
-      <h1>For My <span>Pratyusha</span></h1>
-      <div class="divider">❤</div>
-      <p style="margin-top:11px">Love vouchers · Crafted by Prayash</p>
-    </div>
+<!-- ================= LOGIN ================= -->
 
-    <div class="vlist" id="vlist">
+<section class="screen" id="loginScreen">
+    <div class="glass login-card fade-in">
 
-      <div class="ticket" id="tc-v1" onclick="openModal('v1')">
-        <div class="redeemed-stamp">Used ✓</div>
-        <div class="ticket-stub stub-pink">
-          <span class="stub-emoji">💋</span>
-          <span class="stub-no">PK-001</span>
-        </div>
-        <div class="ticket-perf"></div>
-        <div class="ticket-body" data-wm="Kisses">
-          <div class="ticket-body-top">
-            <div class="ticket-title">Unlimited Kisses</div>
-            <div class="ticket-validity">Valid<span>Forever</span></div>
-          </div>
-          <div class="ticket-tagline">No limit · No permission needed · Just come close</div>
-          <div class="barcode" id="bc1"></div>
-          <div class="ticket-footer">
-            <span class="ticket-serial">PK-001 · KISSES · ∞</span>
-            <span class="ticket-cta">Open →</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="ticket" id="tc-v2" onclick="openModal('v2')">
-        <div class="redeemed-stamp">Used ✓</div>
-        <div class="ticket-stub stub-mauve">
-          <span class="stub-emoji">🤗</span>
-          <span class="stub-no">PK-002</span>
-        </div>
-        <div class="ticket-perf"></div>
-        <div class="ticket-body" data-wm="Hugs">
-          <div class="ticket-body-top">
-            <div class="ticket-title">Warm Hug Pass</div>
-            <div class="ticket-validity">Valid<span>Always</span></div>
-          </div>
-          <div class="ticket-tagline">For the heavy days · One long warm hold</div>
-          <div class="barcode" id="bc2"></div>
-          <div class="ticket-footer">
-            <span class="ticket-serial">PK-002 · HUGS · ∞</span>
-            <span class="ticket-cta">Open →</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="ticket" id="tc-v3" onclick="openModal('v3')">
-        <div class="redeemed-stamp">Used ✓</div>
-        <div class="ticket-stub stub-rose">
-          <span class="stub-emoji">🍕</span>
-          <span class="stub-no">PK-003</span>
-        </div>
-        <div class="ticket-perf"></div>
-        <div class="ticket-body" data-wm="Date">
-          <div class="ticket-body-top">
-            <div class="ticket-title">Our Perfect Day</div>
-            <div class="ticket-validity">Qty<span>× 01</span></div>
-          </div>
-          <div class="ticket-tagline">Your rules · Your mood · Your happiness</div>
-          <div class="barcode" id="bc3"></div>
-          <div class="ticket-footer">
-            <span class="ticket-serial">PK-003 · DATE · 01</span>
-            <span class="ticket-cta">Open →</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="ticket" id="tc-v4" onclick="openModal('v4')">
-        <div class="redeemed-stamp">Used ✓</div>
-        <div class="ticket-stub stub-purple">
-          <span class="stub-emoji">🎨</span>
-          <span class="stub-no">PK-004</span>
-        </div>
-        <div class="ticket-perf"></div>
-        <div class="ticket-body" data-wm="Art">
-          <div class="ticket-body-top">
-            <div class="ticket-title">Artist Queen Support</div>
-            <div class="ticket-validity">Valid<span>Forever</span></div>
-          </div>
-          <div class="ticket-tagline">Your crochet · Your drawings · Your #1 fan</div>
-          <div class="barcode" id="bc4"></div>
-          <div class="ticket-footer">
-            <span class="ticket-serial">PK-004 · ART · ∞</span>
-            <span class="ticket-cta">Open →</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="ticket-lifetime" id="tc-v5" onclick="openLifetimeModal()">
-        <div class="lifetime-outer">
-          <div class="lifetime-inner">
-            <div class="lifetime-header">
-              <div class="notch notch-l"></div>
-              <div class="notch notch-r"></div>
-              <span class="lifetime-emoji">👑</span>
-              <h2>Lifetime Bond Pass</h2>
-              <p>Premium Eternal Access</p>
+        <div class="login-top">
+            <div class="logo">
+                <div class="logo-icon">R</div>
+                <div>
+                    <div class="logo-text">RESQGRID</div>
+                    <div class="logo-sub">EMERGENCY RESPONSE NETWORK</div>
+                </div>
             </div>
-            <div class="lifetime-perf">
-              <div class="perf-dot"></div>
-              <span></span>
-              <div class="perf-dot"></div>
+
+            <div class="status">
+                <span class="status-dot"></span>
+                ONLINE
             </div>
-            <div class="lifetime-body">
-              <p>Gives <strong>Princess Pratyusha</strong> full absolute rights over <em>Prayash's</em> time, love, attention, and entire heart. Valid through all seasons of life.</p>
-              <div class="lifetime-action-prompt">press here ❤️🧿</div>
-            </div>
-            <div class="lifetime-serial">PK-FOREVER · SOULMATES · ∞</div>
-          </div>
         </div>
-      </div>
 
+        <h1 class="login-title">Secure Access</h1>
+
+        <p class="login-description">
+            Authorized personnel only. Please enter your credentials
+            to access the ResqGrid response console.
+        </p>
+
+        <div class="field">
+            <label>USER ID</label>
+            <input id="userId" type="text" placeholder="Enter user ID" autocomplete="off">
+        </div>
+
+        <div class="field">
+            <label>ACCESS KEY</label>
+            <input id="password" type="password" placeholder="Enter access key">
+        </div>
+
+        <button class="btn login-btn" onclick="login()">
+            LOGIN →
+        </button>
+
+        <div class="security">
+            🔒 Encrypted connection • ResqGrid Secure Node
+        </div>
     </div>
+</section>
 
-    <div class="footer">
-      Made with <span>❤</span> for the best girl in the world.
+
+<!-- ================= AUTHENTICATION ================= -->
+
+<section class="screen hidden" id="authScreen">
+    <div class="container">
+        <div class="glass system-card fade-in">
+
+            <div class="system-header">
+                <div class="logo">
+                    <div class="logo-icon">R</div>
+                    <div>
+                        <div class="logo-text">RESQGRID</div>
+                        <div class="logo-sub">SYSTEM CONSOLE</div>
+                    </div>
+                </div>
+
+                <div class="system-time" id="systemTime"></div>
+            </div>
+
+            <div class="terminal" id="terminal">
+                <div id="terminalLines"></div>
+            </div>
+
+            <div class="progress">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+
+        </div>
     </div>
-  </div>
+</section>
 
-  <div class="modal-overlay" id="modalOverlay">
-    <div class="modal">
-      <button class="modal-close" onclick="closeModal()">×</button>
-      <div class="modal-band" id="modalBand">
-        <div class="mnotch mnotch-l"></div>
-        <div class="mnotch mnotch-r"></div>
-        <span class="m-emoji" id="modalEmoji">💝</span>
-        <h2 id="modalTitle">Voucher Details</h2>
-        <div class="modal-band-tag" id="modalTag">Pass Identity</div>
-      </div>
-      <div class="modal-perf">
-        <div class="mperf-dot"></div>
-        <span></span>
-        <div class="mperf-dot"></div>
-      </div>
-      <div class="modal-content">
-        <p id="modalDescription">Special pass details item description text here.</p>
-        <div class="m-serial" id="modalSerial">PK-000 · GENERIC</div>
-      </div>
-      <div class="modal-actions">
-        <button class="btn-redeem" id="redeemBtn" onclick="processRedeem()">Redeem Voucher</button>
-        <button class="btn-back" onclick="closeModal()">Go Back</button>
-      </div>
+
+<!-- ================= CASE ================= -->
+
+<section class="screen hidden" id="caseScreen">
+    <div class="container">
+        <div class="glass case-card fade-in">
+
+            <div class="case-header">
+                <div>
+                    <div class="case-number">RESQGRID / INCIDENT REPORT / #23-01</div>
+                    <h1 class="case-title">Unresolved<br>Situation.</h1>
+                </div>
+
+                <div class="case-badge">● CRITICAL</div>
+            </div>
+
+            <div class="data-grid">
+
+                <div class="data">
+                    <small>CASE STATUS</small>
+                    <strong>Investigation Required</strong>
+                </div>
+
+                <div class="data">
+                    <small>THREAT LEVEL</small>
+                    <strong>Emotional</strong>
+                </div>
+
+                <div class="data">
+                    <small>SUBJECT</small>
+                    <strong id="subjectName">Unknown</strong>
+                </div>
+
+                <div class="data">
+                    <small>LOCATION</small>
+                    <strong>Somewhere inside my heart</strong>
+                </div>
+
+            </div>
+
+            <div class="case-message">
+                <b>System analysis:</b><br>
+                A person has been detected with an injured heart.
+                Preliminary investigation indicates that the damage
+                may have been caused by someone they deeply trust.
+                Further investigation is required.
+            </div>
+
+            <div class="action-row">
+                <button class="btn" onclick="openCase()">
+                    INVESTIGATE CASE →
+                </button>
+            </div>
+
+        </div>
     </div>
-  </div>
+</section>
 
-  <script>
-    // Data Store for Vouchers
-    const voucherData = {
-      v1: {
-        title: "Unlimited Kisses",
-        emoji: "💋",
-        tag: "PK-001 · SWEETNESS",
-        desc: "Gives you full rights to demand <strong>kisses</strong> at any given hour. No arguments can void this pass. Can be stacked for combo actions.",
-        serial: "PK-001 · KISSES · ∞",
-        color: "linear-gradient(135deg, #b5295e, #7c1040)"
-      },
-      v2: {
-        title: "Warm Hug Pass",
-        emoji: "🤗",
-        tag: "PK-002 · COMFORT",
-        desc: "Redeemable when things feel heavy or tired. Entitles you to a tightly wrapped, warm, <strong>anxiety-melting hug</strong> for as long as you need it.",
-        serial: "PK-002 · HUGS · ∞",
-        color: "linear-gradient(135deg, #8e3569, #5c1e45)"
-      },
-      v3: {
-        title: "Our Perfect Day",
-        emoji: "🍕",
-        tag: "PK-003 · ADVENTURE",
-        desc: "A fully custom date planned entirely around your rules, your favorite meals, and your pace. <strong>Prayash pays, organizes, and admires</strong>.",
-        serial: "PK-003 · DATE · 01",
-        color: "linear-gradient(135deg, #c0405a, #842535)"
-      },
-      v4: {
-        title: "Artist Queen Support",
-        emoji: "🎨",
-        tag: "PK-004 · DEVOTION",
-        desc: "Instant access to your ultimate cheerleader. Valid for customized compliments, yarn-holding services, art feedback, or silent companionship while you craft.",
-        serial: "PK-004 · ART · ∞",
-        color: "linear-gradient(135deg, #7249a8, #4a2870)"
-      },
-      v5: {
-        title: "Lifetime Bond Pass",
-        emoji: "👑",
-        tag: "PREMIUM IDENTITY",
-        desc: "To my favorite person, my <strong>Princess Pratyusha</strong>:<br>This card is an eternal promise. No matter where life takes us, how much we grow, or what challenges we face, my love, care, and absolute devotion belong entirely to you. You are my safe space, my happiness, and my soulmate. <em>Always and forever, yours.</em> 🧿❤️",
-        serial: "PK-FOREVER · SOULMATES · ∞",
-        color: "linear-gradient(135deg, #c2185b, #ff6090)"
-      }
-    };
 
-    // Track local redeemed states
-    let state = {
-      v1: false, v2: false, v3: false, v4: false, v5: false
-    };
+<!-- ================= REVEAL ================= -->
 
-    let activeVoucherId = null;
+<section class="screen hidden" id="revealScreen">
+    <div class="container">
+        <div class="glass reveal-card fade-in">
 
-    // Initialize Visual Effects
-    function initBackground() {
-      const starsContainer = document.getElementById('stars');
-      for (let i = 0; i < 45; i++) {
-        const star = document.createElement('div');
-        star.className = 'star';
-        star.style.left = Math.random() * 100 + '%';
-        star.style.top = Math.random() * 100 + '%';
-        star.style.width = star.style.height = (Math.random() * 2.5 + 1) + 'px';
-        star.style.setProperty('--d', (Math.random() * 3 + 2) + 's');
-        star.style.setProperty('--delay', (Math.random() * 5) + 's');
-        starsContainer.appendChild(star);
-      }
+            <div class="heart">❤️</div>
 
-      const petalsContainer = document.getElementById('petals');
-      const symbols = ['🌸', '✨', '💖', '💝', '💕'];
-      for (let i = 0; i < 15; i++) {
-        const petal = document.createElement('div');
-        petal.className = 'petal';
-        petal.innerText = symbols[Math.floor(Math.random() * symbols.length)];
-        petal.style.left = Math.random() * 100 + '%';
-        petal.style.setProperty('--fd', (Math.random() * 6 + 6) + 's');
-        petal.style.setProperty('--fdelay', (Math.random() * 8) + 's');
-        petalsContainer.appendChild(petal);
-      }
-    }
+            <div class="reveal-eyebrow">SYSTEM OVERRIDE DETECTED</div>
 
-    // Generate Barcode Graphics Dynamically
-    function buildBarcodes() {
-      for(let b = 1; b <= 4; b++) {
-        const bc = document.getElementById(`bc${b}`);
-        if(bc) {
-          for(let i = 0; i < 32; i++) {
-            const bar = document.createElement('div');
-            bar.className = 'barcode-bar';
-            bar.style.width = (Math.random() > 0.6 ? 2.5 : 1.2) + 'px';
-            bar.style.height = (Math.random() * 40 + 60) + '%';
-            bc.appendChild(bar);
-          }
-        }
-      }
-    }
+            <h1 class="reveal-title">
+                Pukki...
+            </h1>
 
-    // Modal Operational Engines
-    function openModal(id) {
-      activeVoucherId = id;
-      const data = voucherData[id];
-      
-      document.getElementById('modalTitle').innerText = data.title;
-      document.getElementById('modalEmoji').innerText = data.emoji;
-      document.getElementById('modalTag').innerText = data.tag;
-      document.getElementById('modalDescription').innerHTML = data.desc;
-      document.getElementById('modalSerial').innerText = data.serial;
-      document.getElementById('modalBand').style.background = data.color;
+            <p class="reveal-text">
+                You thought you were logging into ResqGrid.
+                You thought this was just another little project.
+                <br><br>
+                But there was never an emergency outside.
+                <br><br>
+                <strong>The emergency was inside my heart.</strong>
+            </p>
 
-      const btn = document.getElementById('redeemBtn');
-      if (id === 'v5') {
-        if(state[id]) {
-          btn.innerText = "Bound Forever Protection Activated 🧿";
-          btn.classList.add('used');
-        } else {
-          btn.innerText = "Accept Eternal Bond ❤️";
-          btn.classList.remove('used');
-        }
-      } else {
-        if(state[id]) {
-          btn.innerText = "Already Redeemed! 💝";
-          btn.classList.add('used');
-        } else {
-          btn.innerText = "Redeem Voucher";
-          btn.classList.remove('used');
-        }
-      }
+            <div style="margin-top:32px;">
+                <button class="btn" onclick="showStory()">
+                    CONTINUE →
+                </button>
+            </div>
 
-      document.getElementById('modalOverlay').classList.add('open');
-    }
+        </div>
+    </div>
+</section>
 
-    function openLifetimeModal() {
-      openModal('v5');
-    }
 
-    function closeModal() {
-      document.getElementById('modalOverlay').classList.remove('open');
-      activeVoucherId = null;
-    }
+<!-- ================= STORY ================= -->
 
-    function processRedeem() {
-      if(!activeVoucherId || state[activeVoucherId]) return;
+<section class="screen hidden" id="storyScreen">
+    <div class="container">
+        <div class="glass story-card fade-in">
 
-      state[activeVoucherId] = true;
-      
-      // Update structural item state
-      if(activeVoucherId !== 'v5') {
-        const ticketElement = document.getElementById(`tc-${activeVoucherId}`);
-        if(ticketElement) ticketElement.classList.add('is-redeemed');
-      } else {
-        const promptElement = document.querySelector('.lifetime-action-prompt');
-        if(promptElement) promptElement.innerHTML = "Bound Forever 👑❤️🧿";
-      }
+            <div class="story-intro">
+                <div class="reveal-eyebrow">CASE FILE: US</div>
+                <h2>Somewhere along the way...</h2>
+                <p>you became my favourite part of life. ❤️</p>
+            </div>
 
-      // Handle modal dynamic transition elements
-      const btn = document.getElementById('redeemBtn');
-      if (activeVoucherId === 'v5') {
-        btn.innerText = "Core unlocked! Always yours 🔒✨";
-      } else {
-        btn.innerText = "Redeemed! Core unlocked 🔑";
-      }
-      btn.classList.add('used');
+            <div class="timeline">
 
-      // Trigger heart burst particles
-      createBurstEffect();
+                <div class="event">
+                    <div class="event-dot"></div>
+                    <div class="event-date">07 NOVEMBER 2025</div>
+                    <h3>Our First Hug</h3>
+                    <p>
+                        One ordinary moment that somehow became
+                        one of the most special memories of my life.
+                    </p>
+                </div>
 
-      setTimeout(() => {
-        closeModal();
-      }, 1200);
-    }
+                <div class="event">
+                    <div class="event-dot"></div>
+                    <div class="event-date">23 JANUARY 2026</div>
+                    <h3>The Day Everything Changed</h3>
+                    <p>
+                        The day I confessed what my heart had already
+                        known for a long time.
+                    </p>
+                </div>
 
-    function createBurstEffect() {
-      for(let i = 0; i < 16; i++) {
-        const p = document.createElement('div');
-        p.innerText = Math.random() > 0.5 ? '💖' : '🧿';
-        p.style.position = 'fixed';
-        p.style.zIndex = '300';
-        p.style.left = '50%';
-        p.style.top = '50%';
-        p.style.fontSize = '24px';
-        p.style.pointerEvents = 'none';
-        
-        const angle = Math.random() * Math.PI * 2;
-        const velocity = Math.random() * 140 + 70;
-        const tx = Math.cos(angle) * velocity;
-        const ty = Math.sin(angle) * velocity - 40;
+                <div class="event">
+                    <div class="event-dot"></div>
+                    <div class="event-date">10 FEBRUARY 2026</div>
+                    <h3>My First Love Letter</h3>
+                    <p>
+                        Because sometimes “I love you” isn't enough,
+                        and my heart needed more words.
+                    </p>
+                </div>
 
-        p.animate([
-          { transform: 'translate(-50%, -50%) scale(0.5)', opacity: 1 },
-          { transform: `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(1.3)`, opacity: 0.9 },
-          { transform: `translate(calc(-50% + ${tx*1.1}px), calc(-50% + ${ty + 80}px)) scale(0)`, opacity: 0 }
-        ], {
-          duration: 1400,
-          easing: 'cubic-bezier(0.1, 0.8, 0.3, 1)',
-          fill: 'forwards'
-        });
+                <div class="event">
+                    <div class="event-dot"></div>
+                    <div class="event-date">TODAY</div>
+                    <h3>Still You.</h3>
+                    <p>
+                        Through every beautiful moment, every silly
+                        argument, every misunderstanding and every smile...
+                        it is still you.
+                    </p>
+                </div>
 
-        document.body.appendChild(p);
-        setTimeout(() => p.remove(), 1400);
-      }
-    }
+            </div>
 
-    // Window Event Mapping Initialization Setup
-    window.addEventListener('DOMContentLoaded', () => {
-      initBackground();
-      buildBarcodes();
-      
-      Object.keys(state).forEach(id => {
-        const el = document.getElementById(`tc-${id}`);
-        if(el && state[id]) el.classList.add('is-redeemed');
-      });
+            <div style="text-align:center;margin-top:35px;">
+                <button class="btn" onclick="showApology()">
+                    OPEN THE FINAL REPORT →
+                </button>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ================= APOLOGY ================= -->
+
+<section class="screen hidden" id="apologyScreen">
+    <div class="container">
+        <div class="glass letter-card fade-in">
+
+            <div class="letter-label">PERSONAL MESSAGE / NOT A SYSTEM REPORT</div>
+
+            <h2>Pukki, I'm sorry. 🥺</h2>
+
+            <div class="letter">
+
+                <p>
+                    You probably opened this thinking I had made
+                    another normal project.
+                </p>
+
+                <br>
+
+                <p>
+                    But I secretly made all of this because there was
+                    something I wanted to tell you properly.
+                </p>
+
+                <br>
+
+                <p>
+                    <strong>I know I hurt you.</strong>
+                    And I am genuinely sorry.
+                </p>
+
+                <br>
+
+                <p>
+                    I don't want to make excuses for my mistake.
+                    I don't want to prove that I was right.
+                    I just want you to know that I understand
+                    that your feelings matter to me.
+                </p>
+
+                <br>
+
+                <p>
+                    If my words or actions made your heart heavy,
+                    then I'm truly, genuinely sorry, Shona.
+                </p>
+
+                <br>
+
+                <p>
+                    You deserve to feel loved, respected, safe,
+                    and believed in.
+                </p>
+
+                <br>
+
+                <p>
+                    And even though I can't change what already happened,
+                    <strong>I can learn from it and do better.</strong>
+                </p>
+
+            </div>
+
+            <div class="signature">
+                — Your stupidly-in-love boyfriend ❤️
+            </div>
+
+            <div style="margin-top:38px;">
+                <button class="btn" onclick="showQuestion()">
+                    ONE LAST QUESTION →
+                </button>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ================= QUESTION ================= -->
+
+<section class="screen hidden" id="questionScreen">
+    <div class="container">
+        <div class="glass question-card fade-in">
+
+            <div class="question-small">RESQGRID FINAL VERIFICATION</div>
+
+            <h2>
+                Will you please forgive me
+                and believe in me again? 🥺❤️
+            </h2>
+
+            <p>
+                I won't force your answer.
+                I just want to ask you from my heart.
+            </p>
+
+            <div class="choice-area" id="choiceArea">
+
+                <button class="btn choice" onclick="yesAnswer()">
+                    YES ❤️
+                </button>
+
+                <button class="btn secondary choice no-btn"
+                        id="noBtn"
+                        onclick="noAnswer()">
+                    NO 🥺
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ================= FINAL ================= -->
+
+<section class="screen hidden" id="finalScreen">
+    <div class="container">
+        <div class="glass final-card fade-in">
+
+            <div class="big-heart">❤️</div>
+
+            <h1>I'M GENUINELY<br>SORRYYYY!</h1>
+
+            <p>
+                Thank you for giving me another chance.
+                <br><br>
+                I promise I will value your trust,
+                your feelings, your heart and <strong>you</strong>
+                much more carefully.
+                <br><br>
+                I may not always be perfect...
+                but I will always try to become better
+                for us.
+            </p>
+
+            <div class="final-love">
+                I LOVE YOU SO, SO MUCH, PUKKI. 🥺❤️
+            </div>
+
+            <div class="case-closed">
+                RESQGRID / CASE #23-01 / STATUS: RESOLVED ❤️
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ================= NO RESPONSE ================= -->
+
+<section class="screen hidden" id="noScreen">
+    <div class="container">
+        <div class="glass final-card fade-in">
+
+            <div style="font-size:60px;margin-bottom:20px;">🥺</div>
+
+            <h1>It's okay.</h1>
+
+            <p>
+                I understand.
+                <br><br>
+                You don't have to forgive me immediately.
+                You don't have to pretend that everything is okay.
+                <br><br>
+                Take your time, Pukki.
+                <br><br>
+                <strong>I'll still be here.</strong>
+            </p>
+
+            <div class="final-love">
+                I love you. ❤️
+            </div>
+
+            <div class="case-closed">
+                RESQGRID / CASE #23-01 / WAITING WITH LOVE
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<div class="toast" id="toast"></div>
+
+
+<script>
+
+/* ================= HELPERS ================= */
+
+const screens = [
+    "loginScreen",
+    "authScreen",
+    "caseScreen",
+    "revealScreen",
+    "storyScreen",
+    "apologyScreen",
+    "questionScreen",
+    "finalScreen",
+    "noScreen"
+];
+
+function showScreen(id){
+
+    screens.forEach(screen=>{
+        document.getElementById(screen).classList.add("hidden");
     });
-  </script>
+
+    document.getElementById(id).classList.remove("hidden");
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+}
+
+function toast(message){
+
+    const el=document.getElementById("toast");
+
+    el.textContent=message;
+    el.classList.add("show");
+
+    setTimeout(()=>{
+        el.classList.remove("show");
+    },2500);
+}
+
+
+/* ================= LOGIN ================= */
+
+function login(){
+
+    const user=document.getElementById("userId").value.trim();
+    const pass=document.getElementById("password").value.trim();
+
+    /*
+       Any credentials work.
+       This keeps the website a surprise.
+    */
+
+    if(!user){
+        toast("Please enter a User ID.");
+        return;
+    }
+
+    if(!pass){
+        toast("Please enter the Access Key.");
+        return;
+    }
+
+    document.getElementById("subjectName").textContent =
+        user.toUpperCase();
+
+    showScreen("authScreen");
+
+    runAuthentication();
+}
+
+
+/* ================= AUTHENTICATION ================= */
+
+function runAuthentication(){
+
+    const terminal=document.getElementById("terminalLines");
+    const bar=document.getElementById("progressBar");
+
+    terminal.innerHTML="";
+
+    const lines=[
+        ["Initializing ResqGrid secure node...","info"],
+        ["Establishing encrypted connection...",""],
+        ["Verifying access credentials...",""],
+        ["Scanning active response channels...",""],
+        ["Checking incident database...",""],
+        ["WARNING: Unresolved incident detected.","info"],
+        ["Opening restricted case file...",""],
+        ["Access granted ✓","success"]
+    ];
+
+    let index=0;
+    let progress=0;
+
+    const interval=setInterval(()=>{
+
+        if(index<lines.length){
+
+            const div=document.createElement("div");
+
+            div.className=lines[index][1];
+            div.textContent="> "+lines[index][0];
+
+            terminal.appendChild(div);
+
+            index++;
+
+            progress=Math.min(
+                100,
+                Math.round((index/lines.length)*100)
+            );
+
+            bar.style.width=progress+"%";
+
+        }else{
+
+            clearInterval(interval);
+
+            setTimeout(()=>{
+                showScreen("caseScreen");
+            },900);
+
+        }
+
+    },550);
+}
+
+
+/* ================= CASE ================= */
+
+function openCase(){
+
+    showScreen("revealScreen");
+}
+
+
+/* ================= STORY ================= */
+
+function showStory(){
+
+    showScreen("storyScreen");
+}
+
+
+/* ================= APOLOGY ================= */
+
+function showApology(){
+
+    showScreen("apologyScreen");
+}
+
+
+/* ================= QUESTION ================= */
+
+function showQuestion(){
+
+    showScreen("questionScreen");
+}
+
+
+/* ================= YES ================= */
+
+function yesAnswer(){
+
+    createConfetti(170);
+    createHearts(30);
+
+    setTimeout(()=>{
+        showScreen("finalScreen");
+    },700);
+}
+
+
+/* ================= NO ================= */
+
+let noClicks=0;
+
+function noAnswer(){
+
+    noClicks++;
+
+    const btn=document.getElementById("noBtn");
+
+    if(noClicks<=5){
+
+        const area=document.getElementById("choiceArea");
+
+        const areaRect=area.getBoundingClientRect();
+
+        const maxX=Math.max(0,areaRect.width-btn.offsetWidth);
+        const maxY=Math.max(0,areaRect.height-btn.offsetHeight);
+
+        const x=Math.random()*maxX-maxX/2;
+        const y=Math.random()*maxY-maxY/2;
+
+        btn.style.transform=
+            `translate(${x}px,${y}px)`;
+
+        const messages=[
+            "Are you sure? 🥺",
+            "Think again... ❤️",
+            "One more chance? 🥺",
+            "I'll wait for you...",
+            "Okay... I understand ❤️"
+        ];
+
+        toast(messages[noClicks-1]);
+
+    }else{
+
+        btn.style.transform="none";
+
+        showScreen("noScreen");
+
+    }
+}
+
+
+/* ================= CONFETTI ================= */
+
+function createConfetti(amount){
+
+    for(let i=0;i<amount;i++){
+
+        const piece=document.createElement("div");
+
+        piece.className="confetti";
+
+        const shapes=[
+            "❤️",
+            "✨",
+            "●",
+            "◆",
+            "♥"
+        ];
+
+        piece.textContent=
+            shapes[Math.floor(Math.random()*shapes.length)];
+
+        piece.style.left=Math.random()*100+"vw";
+
+        piece.style.fontSize=
+            (8+Math.random()*13)+"px";
+
+        piece.style.setProperty(
+            "--x",
+            (Math.random()*400-200)+"px"
+        );
+
+        piece.style.animationDuration=
+            (2.5+Math.random()*3)+"s";
+
+        document.body.appendChild(piece);
+
+        setTimeout(()=>{
+            piece.remove();
+        },6000);
+    }
+}
+
+
+/* ================= HEARTS ================= */
+
+function createHearts(amount){
+
+    for(let i=0;i<amount;i++){
+
+        setTimeout(()=>{
+
+            const heart=document.createElement("div");
+
+            heart.className="floating-heart";
+
+            heart.textContent=
+                Math.random()>.5 ? "❤️" : "💗";
+
+            heart.style.left=
+                Math.random()*100+"vw";
+
+            heart.style.fontSize=
+                (14+Math.random()*25)+"px";
+
+            heart.style.setProperty(
+                "--drift",
+                (Math.random()*160-80)+"px"
+            );
+
+            heart.style.animationDuration=
+                (3+Math.random()*3)+"s";
+
+            document.body.appendChild(heart);
+
+            setTimeout(()=>{
+                heart.remove();
+            },6500);
+
+        },i*100);
+    }
+}
+
+
+/* ================= CLOCK ================= */
+
+function updateClock(){
+
+    const el=document.getElementById("systemTime");
+
+    const now=new Date();
+
+    el.textContent=
+        now.toLocaleTimeString(
+            [],
+            {
+                hour:"2-digit",
+                minute:"2-digit",
+                second:"2-digit"
+            }
+        );
+}
+
+setInterval(updateClock,1000);
+updateClock();
+
+
+/* ================= ENTER KEY ================= */
+
+document.addEventListener("keydown",function(e){
+
+    if(e.key==="Enter"){
+
+        const loginVisible=
+            !document
+            .getElementById("loginScreen")
+            .classList.contains("hidden");
+
+        if(loginVisible){
+            login();
+        }
+
+    }
+
+});
+
+</script>
+
 </body>
 </html>
